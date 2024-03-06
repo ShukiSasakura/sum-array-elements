@@ -3,21 +3,6 @@
 ## Overview
 Wasm に対応した，配列の各要素の総和を計算するプログラム
 
-### Option
-```
--n N
-```
-スレッド数（配列の分割数）を指定する
-
-### Command Format
-+ Rust native
-```
-
-```
-+ Wasmer + WASIX
-```
-
-```
 
 ## Requirement
 + Rust
@@ -27,6 +12,19 @@ Wasm に対応した，配列の各要素の総和を計算するプログラム
 ### Install Wasmer
 
 ## Usage
+### Command Format
++ Rust native
+```
+
+```
++ Wasmer + WASIX
+```
+
+```
+### Option
+`-n N`
+スレッド数（配列の分割数）を指定する
+
 
 ## Features
 ### Flow
