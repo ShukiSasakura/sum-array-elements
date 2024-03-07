@@ -1,58 +1,55 @@
 use clap::Parser;
 use std::thread;
+use std::sync::{Arc, Mutex};
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about)]
 struct Args {
     #[arg(short, long, default_value_t = 1)]
-    number: u32,
+    number: u64,
 }
 
 fn main() {
-    const LENGTH_VEC:usize = 10000;
+    const LENGTH_VEC:u64 = 10000;
     // オプションからスレッド数を取得
     let args = Args::parse();
-    let thread_num = args.number;
+    let thread_num:u64 = args.number;
 
-    let mut handles = vec![];
-    let mut sums = vec![];
+    let sums = Arc::new(Mutex::new(vec![]));
 
     // 配列を用意
-    let mut vec1: Vec<u64> = Vec::with_capacity(LENGTH_VEC);
-    for i in 1..=LENGTH_VEC {
-        vec1.push(i.try_into().unwrap());
-    }
+    let vec1:Vec<u64> = (1..LENGTH_VEC).collect();
 
     // 与えられた数に配列を分割
-    let split_num =<usize as TryInto<u32>>::try_into(LENGTH_VEC).unwrap() / thread_num;
+    let split_num = LENGTH_VEC / thread_num;
     let mut splitted_vec_iter = vec1.chunks(split_num.try_into().unwrap());
     // 各配列をスレッドに渡し，各和を計算
-    for i in 1..=thread_num {
-        let mut splitted_vec = splitted_vec_iter.next();
-        let handle = thread::spawn(move || {
-            let mut sum = 0;
-            match splitted_vec {
-                None =>{},
-                Some(vec_for_calculation) => {
-                    for j in 0..vec_for_calculation.len() {
-                        sum = sum + vec_for_calculation[j];
+    thread::scope(|s| {
+        for _ in 1..=thread_num {
+            let sums = Arc::clone(&sums);
+            let splitted_vec = splitted_vec_iter.next();
+            s.spawn(move || {
+                let mut sum = 0;
+                match splitted_vec {
+                    None =>{},
+                    Some(vec_for_calculation) => {
+                        for v in vec_for_calculation {
+                            sum += v;
+                        }
                     }
                 }
-            }
-            sums.push(sum);
-        });
-        handles.push(handle);
-
-    }
-    // 計算終了を待つ
-    for handle in handles {
-        handle.join().unwrap();
-    }
+                let mut sums_element_vec = sums.lock().unwrap();
+                sums_element_vec.push(sum);
+            });
+        }
+    });
 
     // 各和の総和を求める
     let mut result = 0;
+    let mut binding = Arc::try_unwrap(sums).unwrap();
+    let sums = binding.get_mut().unwrap();
     for sum in sums {
-        result = result + sum;
+        result += *sum;
     }
     println!("{:?}", result);
 }
