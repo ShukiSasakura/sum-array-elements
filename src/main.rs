@@ -1,6 +1,7 @@
 use clap::Parser;
 use std::thread;
 use std::sync::{Arc, Mutex};
+use std::time::Instant;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -20,9 +21,13 @@ fn main() {
     // 配列を用意
     let vec1:Vec<u64> = (1..LENGTH_VEC).collect();
 
+    //時間計測を開始
+    let start_time = Instant::now();
+
     // 与えられた数に配列を分割
     let split_num = LENGTH_VEC / thread_num;
     let mut splitted_vec_iter = vec1.chunks(split_num.try_into().unwrap());
+
     // 各配列をスレッドに渡し，各和を計算
     thread::scope(|s| {
         for _ in 1..=thread_num {
@@ -51,5 +56,11 @@ fn main() {
     for sum in sums {
         result += *sum;
     }
-    println!("{:?}", result);
+
+    // 計算時間を算出する
+    let elapsed = start_time.elapsed();
+    let elapsed_time = elapsed.as_nanos() as u64;
+    println!("time,{:?}", elapsed_time);
+
+    println!("result,{:?}", result);
 }
