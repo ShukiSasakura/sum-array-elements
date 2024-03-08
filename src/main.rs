@@ -60,7 +60,9 @@ fn main() {
     // 計算時間を算出する
     let elapsed = start_time.elapsed();
     let elapsed_time = elapsed.as_nanos() as u64;
-    println!("time,{:?}", elapsed_time);
 
-    println!("result,{:?}", result);
+    // 計算時間を出力する
+    println!("elapsed_time, result");
+    println!("{:?}, {:?}", elapsed_time, result);
+
 }
