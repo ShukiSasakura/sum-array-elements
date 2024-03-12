@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::thread;
+use std::{thread, f64};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
@@ -11,7 +11,7 @@ struct Args {
 }
 
 fn main() {
-    const LENGTH_VEC:u64 = 10000;
+    const LENGTH_VEC:u64 = 1000000;
     // オプションからスレッド数を取得
     let args = Args::parse();
     let thread_num:u64 = args.number;
@@ -38,8 +38,11 @@ fn main() {
                 match splitted_vec {
                     None =>{},
                     Some(vec_for_calculation) => {
-                        for v in vec_for_calculation {
-                            sum += v;
+                        for _ in 1..10000 {
+                            sum = 0;
+                            for v in vec_for_calculation {
+                                sum += v;
+                            }
                         }
                     }
                 }
@@ -59,7 +62,8 @@ fn main() {
 
     // 計算時間を算出する
     let elapsed = start_time.elapsed();
-    let elapsed_time = elapsed.as_nanos() as u64;
+    let elapsed_time = elapsed.as_nanos() as f64;
+    let elapsed_time = elapsed_time / 1000000000.0;
 
     // 計算時間を出力する
     println!("elapsed_time, result");
