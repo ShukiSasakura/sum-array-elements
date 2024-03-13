@@ -35,15 +35,19 @@ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 ```
 ### Option
 `-l, --length-of-vec N [default: 1000000]`
+
 計算する配列の長さを指定する
 
 `-n, --number N [default: 1]`
+
 計算に使用するスレッド数を指定する
 
 `-r, --repeat-times N [default: 400000]`
+
 計算量を調節するために，各スレッドが割り当てられた配列部分の和を計算する回数
 
 `-w N`
+
 各スレッドが一度に計算する配列要素の数
 
 ## Features
