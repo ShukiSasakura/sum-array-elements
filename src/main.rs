@@ -38,7 +38,7 @@ fn main() {
                 match splitted_vec {
                     None =>{},
                     Some(vec_for_calculation) => {
-                        for _ in 1..10000 {
+                        for _ in 1..400000 {
                             sum = 0;
                             for v in vec_for_calculation {
                                 sum += v;
