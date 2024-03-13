@@ -6,10 +6,10 @@ use std::time::Instant;
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
 struct Args {
-    #[arg(short, long, default_value_t = 1)]
-    number: u64,
     #[arg(short, long, default_value_t = 1000000)]
     length_of_vec: u64,
+    #[arg(short, long, default_value_t = 1)]
+    number: u64,
     #[arg(short, long, default_value_t = 400000)]
     repeat_times: u64,
 }
