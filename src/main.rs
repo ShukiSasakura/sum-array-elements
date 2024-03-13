@@ -8,24 +8,30 @@ use std::time::Instant;
 struct Args {
     #[arg(short, long, default_value_t = 1)]
     number: u64,
+    #[arg(short, long, default_value_t = 1000000)]
+    length_of_vec: u64,
+    #[arg(short, long, default_value_t = 400000)]
+    repeat_times: u64,
 }
 
 fn main() {
-    const LENGTH_VEC:u64 = 1000000;
-    // オプションからスレッド数を取得
+    // オプションから値を取得
     let args = Args::parse();
     let thread_num:u64 = args.number;
+    let length_vec:u64 = args.length_of_vec;
+    let repeat_times:u64 = args.repeat_times;
+
 
     let sums = Arc::new(Mutex::new(vec![]));
 
     // 配列を用意
-    let vec1:Vec<u64> = (1..LENGTH_VEC).collect();
+    let vec1:Vec<u64> = (1..length_vec).collect();
 
     //時間計測を開始
     let start_time = Instant::now();
 
     // 与えられた数に配列を分割
-    let split_num = LENGTH_VEC / thread_num;
+    let split_num = length_vec / thread_num;
     let mut splitted_vec_iter = vec1.chunks(split_num.try_into().unwrap());
 
     // 各配列をスレッドに渡し，各和を計算
@@ -38,7 +44,7 @@ fn main() {
                 match splitted_vec {
                     None =>{},
                     Some(vec_for_calculation) => {
-                        for _ in 1..400000 {
+                        for _ in 1..repeat_times {
                             sum = 0;
                             for v in vec_for_calculation {
                                 sum += v;
