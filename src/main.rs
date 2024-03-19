@@ -144,7 +144,6 @@ fn main() {
                             }
                         }
                         let mut sums_element_vec = sums.lock().unwrap();
-                        println!("sum: {:?}", sum);
                         sums_element_vec.push(sum);
                     });
                 }
