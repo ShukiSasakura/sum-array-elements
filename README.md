@@ -10,28 +10,28 @@ Wasm に対応した，配列の各要素の総和を計算するプログラム
 ### Install Rust
 [Rust をインストール](https://www.rust-lang.org/ja/tools/install)
 ```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 ### Install Wasmer + WASIX
 [Wasmer](https://github.com/wasmerio/wasmer)
 ```
-curl https://get.wasmer.io -sSfL | sh
+$ curl https://get.wasmer.io -sSfL | sh
 ```
 [WASIX](https://wasix.org/docs/language-guide/rust/installation)
 ```
-cargo install cargo-wasix
+$ cargo install cargo-wasix
 ```
 
 ## Usage
 + Rust native
 ```
-cargo build --release
-./target/release/sum-array-elements
+$ cargo build --release
+$ ./target/release/sum-array-elements
 ```
 + Wasmer + WASIX
 ```
-cargo wasix build --release
-wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
+$ cargo wasix build --release
+$ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 ```
 ### Option
 `-l, --length-of-vec L [default: 1000000]`
