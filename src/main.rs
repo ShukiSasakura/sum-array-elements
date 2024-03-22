@@ -9,12 +9,12 @@ use std::sync::mpsc;
 struct Args {
     #[arg(short, long, default_value_t = 1000000)]
     length_of_vec: u64,
+    #[arg(short, long, default_value_t = 1)]
+    thread_num: usize,
+    #[arg(short, long, default_value_t = 1000)]
+    chunk_size: usize,
     #[arg(short, long, default_value_t = 400000)]
     repeat_times: u64,
-    #[arg(short='n', long, default_value_t = 1)]
-    thread_num: usize,
-    #[arg(long, default_value_t = 1000)]
-    task_size: usize,
 }
 
 pub struct ThreadPool {
@@ -107,12 +107,12 @@ pub enum Message {
 fn main() {
     // オプションから値を取得
     let args = Args::parse();
-    let thread_num:usize = args.thread_num;
     let length_vec:u64 = args.length_of_vec;
+    let thread_num:usize = args.thread_num;
+    let chunk_size:usize = args.chunk_size;
     let repeat_times:u64 = args.repeat_times;
-    let task_size:usize = args.task_size;
 
-    // 配列を用意
+    // 計算用配列を生成
     let calculation_vec:Vec<u64> = (1..=length_vec).collect();
 
     let sums = Arc::new(Mutex::new(vec![]));
@@ -121,13 +121,13 @@ fn main() {
     let start_time = Instant::now();
 
     // 各スレッドが一回で計算する要素の数に配列を分割
-    let split_num = length_vec / <usize as TryInto<u64>>::try_into(task_size).unwrap();
-    let mut splitted_vec_iter = calculation_vec.chunks(task_size);
+    let split_num = length_vec / <usize as TryInto<u64>>::try_into(chunk_size).unwrap();
+    let mut splitted_vec_iter = calculation_vec.chunks(chunk_size);
 
     {
-    // スレッドプールを作成
-    let thread_pool = ThreadPool::new(thread_num);
-    // 各配列をスレッドに渡し，各和を計算
+        // スレッドプールを作成
+        let thread_pool = ThreadPool::new(thread_num);
+        // 各配列をスレッドに渡し，各和を計算
         for _ in 0..split_num {
             let split_vec = splitted_vec_iter.next();
             let sums = Arc::clone(&sums);

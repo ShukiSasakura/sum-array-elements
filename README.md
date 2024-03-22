@@ -5,14 +5,14 @@ Wasm に対応した，配列の各要素の総和を計算するプログラム
 
 ## Requirement
 + Rust
-+ Wasmer
++ Wasmer + WASIX
 
 ### Install Rust
 [Rust をインストール](https://www.rust-lang.org/ja/tools/install)
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-### Install Wasmer
+### Install Wasmer + WASIX
 [Wasmer](https://github.com/wasmerio/wasmer)
 ```
 curl https://get.wasmer.io -sSfL | sh
@@ -34,29 +34,30 @@ cargo wasix build --release
 wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 ```
 ### Option
-`-l, --length-of-vec N [default: 1000000]`
+`-l, --length-of-vec L [default: 1000000]`
 
 計算する配列の長さを指定する
 
-`-r, --repeat-times N [default: 400000]`
+`-c, --chunk_size M [default: 1000]`
 
-計算量を調節するために，各スレッドが割り当てられた配列部分の和を計算する回数
+各スレッドが一度の chunk で計算する配列要素の数
 
-`-n, --thread_num N [default: 1]`
+`-t, --thread_num N [default: 1]`
 
 計算に使用するスレッド数を指定する
 
-`--task_size N [default: 1000]`
+`-r, --repeat-times P [default: 400000]`
 
-各スレッドが一度のタスクで計算する配列要素の数
+計算量を調節するために，各スレッドが割り当てられた配列部分の和を計算する回数
 
 ## Features
 ### Flow
-1. 配列を生成
-2. 時間計測を開始
-3. 配列を各スレッドが一度のタスクで計算する要素の数で分割
-4. スレッドプール作成
-5. 分割した各配列をワーカスレッドに渡し和を計算
-6. ワーカスレッドは計算量を増加させるため5の計算を繰り返す
-7. 計算の終了を待ち，各和の総和を計算
-8. 計算時間を算出，出力
+1. 長さ L の計算用配列を生成する
+2. 時間計測を開始する
+3. 計算用配列を大きさ M で分割する
+4. N 個のワーカスレッドを持つスレッドプールを作成する
+5. メインスレッドは分割した配列の総和を計算する chunk を配列ごとにワーカスレッドに渡す
+6. ワーカスレッドは chunk の内容を実行する（配列の総和を計算する）
+7. ワーカスレッドは計算量を増加させるため6の計算を P 回繰り返す
+8. メインスレッドはワーカスレッドの計算の終了を待ち，各和の総和を計算
+9. 計算時間を算出，出力する
