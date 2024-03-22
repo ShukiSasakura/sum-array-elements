@@ -40,7 +40,7 @@ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 
 `-c, --chunk_size M [default: 1000]`
 
-各スレッドが一度の chunk で計算する配列要素の数
+各スレッドが一度に計算する配列要素の数(chunk)
 
 `-t, --thread_num N [default: 1]`
 
@@ -48,7 +48,7 @@ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 
 `-r, --repeat-times P [default: 400000]`
 
-計算量を調節するために，各スレッドが割り当てられた配列部分の和を計算する回数
+計算量を調節するために，各スレッドが割り当てられた chunk の和を計算する回数
 
 ### Example
 + Rust native
@@ -67,8 +67,8 @@ $ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm -- -l 1000000
 2. 時間計測を開始する
 3. 計算用配列を大きさ M で分割する
 4. N 個のワーカスレッドを持つスレッドプールを作成する
-5. メインスレッドは分割した配列の総和を計算する chunk を配列ごとにワーカスレッドに渡す
-6. ワーカスレッドは chunk の内容を実行する（配列の総和を計算する）
+5. メインスレッドは chunk の総和を計算するタスクを配列ごとにワーカスレッドに渡す
+6. ワーカスレッドは chunk の総和を計算する
 7. ワーカスレッドは計算量を増加させるため6の計算を P 回繰り返す
-8. メインスレッドはワーカスレッドの計算の終了を待ち，各和の総和を計算
+8. メインスレッドはワーカスレッドの計算の終了を待ち，各和の総和を計算する
 9. 計算時間を算出，出力する
