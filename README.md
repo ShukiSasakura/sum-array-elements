@@ -50,6 +50,17 @@ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 
 計算量を調節するために，各スレッドが割り当てられた配列部分の和を計算する回数
 
+### Example
++ Rust native
+```
+$ ./target/release/sum-array-elements -l 1000000 -c 1000 -t 4 -r 100000
+```
+
++ Wasmer + WASIX
+```
+$ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm -- -l 1000000 -c 1000 -t 4 -r 100000
+```
+
 ## Features
 ### Flow
 1. 長さ L の計算用配列を生成する
