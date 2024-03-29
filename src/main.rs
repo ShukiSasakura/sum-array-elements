@@ -163,7 +163,8 @@ fn main() {
     let elapsed_time = elapsed_time / 1000000000.0;
 
     // 計算時間を出力する
-    println!("elapsed_time, result");
-    println!("{:?}, {:?}", elapsed_time, result);
+    // println!("elapsed_time, result");
+    // println!("{:?}, {:?}", elapsed_time, result);
+    println!("{:?}", elapsed_time);
 
 }

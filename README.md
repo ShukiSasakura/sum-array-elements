@@ -38,11 +38,11 @@ $ wasmer target/wasm32-wasmer-wasi/release/sum-array-elements.wasm
 
 計算する配列の長さを指定する
 
-`-c, --chunk_size M [default: 1000]`
+`-c, --chunk-size M [default: 1000]`
 
 各スレッドが一度に計算する配列要素の数(chunk)
 
-`-t, --thread_num N [default: 1]`
+`-t, --thread-num N [default: 1]`
 
 計算に使用するスレッド数を指定する
 
