@@ -70,16 +70,16 @@ y1 = wasm_n1/wasm_df['c1000']
 y2 = native_n1/native_df['c1000']
 
 ## 縦軸を時間とする場合
-#x = wasm_df['n']
-#y1 = wasm_df['c1']
-#y2 = native_df['c1']
+# x = wasm_df['n']
+# y1 = wasm_df['c1']
+# y2 = native_df['c1']
 
 # y1 軸と y2 軸を重ねるために 2つの ax を作成して重ねる
 fig, ax1 = plt.subplots()
-ax2 = ax1.twinx()
+# ax2 = ax1.twinx()
 
 # ax1 のほうに X軸とラベルを書く
-## 時間の場合
+## x軸が時間の場合
 ## ax1.xaxis.set_major_formatter(md.DateFormatter('%H:%M'))
 ## ax1.xaxis.set_major_locator(md.HourLocator(byhour=range(0, 24, 3), tz=None))
 ## date = datetime.strptime(target_date, '%Y%m%d')
@@ -91,9 +91,9 @@ ax1.set_xlabel(label)
 
 # 折れ線グラフのプロット
 # ax1 のほうに結果をプロット Y軸 (左) にラベルを書く
-ax1.plot(x, y1, c='b', label='wasm', ls='-', lw=1)
 ax1.plot(x, y2, c='g', label='native', ls='--', lw=1)
-ax1.set_ylabel("time")
+ax1.plot(x, y1, c='b', label='wasm', ls='-', lw=1)
+ax1.set_ylabel("performance ratio")
 
 # ax2 のほうに気温をプロット Y軸 (右) にラベルを書く
 # ax2.plot(x, y2, c='g', label='native', ls='--', lw=1)
